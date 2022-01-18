@@ -19,7 +19,7 @@ io.on('connection', function (socket){
     console.log('a user connected: ' + socket.id + " (server: " + serverID + " )");
     //register the server id, received the command from unity
     socket.on('RegServerId', function (data){
-        serverID = socket.id;
+        serverID = data.RoomId;
         console.log('reg server id : ' + serverID);
     });
 
@@ -43,7 +43,7 @@ io.on('connection', function (socket){
                 //emit type: all;
                 case 0: io.emit('OnReceiveData', { DataString: data.DataString, DataByte: data.DataByte }); break;
                 //emit type: server;
-                case 1: io.to(serverID).emit('OnReceiveData', { DataString: data.DataString, DataByte: data.DataByte }); break;
+                case 1: io.to(data.RoomId).emit('OnReceiveData', { DataString: data.DataString, DataByte: data.DataByte }); break;
                 //emit type: others;
                 case 2: socket.broadcast.emit('OnReceiveData', { DataString: data.DataString, DataByte: data.DataByte }); break;
             }
